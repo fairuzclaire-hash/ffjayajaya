@@ -35,12 +35,13 @@ START.bat
 START-POWERSHELL.ps1
 START-SERVER.bat
 
-# Large media files (uploaded to Google Drive)
-public/*.mp3
-public/*.mp4
-public/*.png
-public/*.jpg
-public/*.jpeg
+# Large media files will be handled by Git LFS
+# So we DON'T ignore them anymore
+# public/*.mp3
+# public/*.mp4
+# public/*.png
+# public/*.jpg
+# public/*.jpeg
 
 # Setup instructions (optional)
 SETUP-INSTRUCTIONS.md

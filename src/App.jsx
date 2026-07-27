@@ -3,35 +3,11 @@ import { motion } from 'framer-motion'
 import Confetti from 'react-confetti'
 import './App.css'
 
-// Google Drive links untuk semua media files
-const MEDIA_URLS = {
-  // Images
-  'avatar.png': 'https://drive.google.com/uc?export=download&id=1Zx6b5OcJ0-v2k9KgtYyjqIJyRU6tvxjE',
-  'bucket-bunga.png': 'https://drive.google.com/uc?export=download&id=12kYwN-ond6GQFFqjma5F0yLQqY70LvC7',
-  'gallery4.jpg': 'https://drive.google.com/uc?export=download&id=1_Hp97V5L3hTZAatmVSr0emG4UWKY6N-T',
-  'gallery5.jpeg': 'https://drive.google.com/uc?export=download&id=1yMrHoR40kHD0O-ggNdb9QheGMurdHZ4f',
-  'gallery6.jpeg': 'https://drive.google.com/uc?export=download&id=1ljVkYBVwcpSQBuo2k7Gvv4pD6Ym3czJB',
-  
-  // Videos
-  'gallery1.mp4': 'https://drive.google.com/uc?export=download&id=1Aypft7JOg_6x3Os0ycToXQxLTHSUemgc',
-  'gallery2.mp4': 'https://drive.google.com/uc?export=download&id=18KrHiDbg4Rk0XLF9u38Qze2FTukVglct',
-  'gallery3.mp4': 'https://drive.google.com/uc?export=download&id=1BX614rhy48aXo8WVXVcuyjdHzpEAiHER',
-  'video-final.mp4': 'https://drive.google.com/uc?export=download&id=1Ke40cnQz2gO1zK2I7gvPRcbuleZolHCt',
-  
-  // Audio
-  "Arash Buana - i've always loved u (MV).mp3": 'https://drive.google.com/uc?export=download&id=1BfIH5Q-LKIzXsLlO7wIecIUU5K_7Si-L',
-  'Dendi Nata - Abadi (Indo Version) Lyric Video.mp3': 'https://drive.google.com/uc?export=download&id=1l-6DY6YQ9oMX0OEXWDGkknOFFGS1Zdny',
-  "I'd like to watch you sleeping  lirik dan musik oleh Sal Priadi.mp3": 'https://drive.google.com/uc?export=download&id=1lu4zVScJC1ZTsU2RnRGWoEbQLC1Ey8db',
-  'Joon - with ease (Official Lyric Video).mp3': 'https://drive.google.com/uc?export=download&id=1MSXXXADcrAMRUvWVA7x8wvPAwCYKZuZo',
-  'Yovie & Nuno - Manusia Biasa.mp3': 'https://drive.google.com/uc?export=download&id=1CaS-cbE-qSy_2Z0nKXvaCZ38sSAcl5H8',
-  'Yovie & Nuno - Sampai Akhir Waktu.mp3': 'https://drive.google.com/uc?export=download&id=112ZfyZzZWPWJzDtvEN7fnWsq-muKpYPU'
-}
-
-// Helper untuk get media dari Google Drive atau fallback ke local
+// Helper untuk memastikan base URL folder public terbaca dengan benar di berbagai env
 const getPublicAsset = (path) => {
+  // Menghapus slash di awal jika ada, lalu menggabungkannya dengan objek URL dasar
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  // Return Google Drive URL jika ada, kalau ga ada fallback ke local
-  return MEDIA_URLS[cleanPath] || `${window.location.origin}/${cleanPath}`;
+  return `/${cleanPath}`;
 }
 
 // Hero Section
