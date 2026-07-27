@@ -36,12 +36,7 @@ START-POWERSHELL.ps1
 START-SERVER.bat
 
 # Large media files will be handled by Git LFS
-# So we DON'T ignore them anymore
-# public/*.mp3
-# public/*.mp4
-# public/*.png
-# public/*.jpg
-# public/*.jpeg
+# Commented out so files CAN be uploaded
 
 # Setup instructions (optional)
 SETUP-INSTRUCTIONS.md

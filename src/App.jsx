@@ -5,9 +5,11 @@ import './App.css'
 
 // Helper untuk memastikan base URL folder public terbaca dengan benar di berbagai env
 const getPublicAsset = (path) => {
-  // Menghapus slash di awal jika ada, lalu menggabungkannya dengan objek URL dasar
+  // Menghapus slash di awal jika ada
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `/${cleanPath}`;
+  // Untuk GitHub Pages, kita perlu base path dari vite.config.js
+  const base = import.meta.env.BASE_URL || '/';
+  return `${base}${cleanPath}`;
 }
 
 // Hero Section
