@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# OS files
+Thumbs.db
+
+# Local development files
+*.bat
+*.ps1
+START.bat
+START-POWERSHELL.ps1
+START-SERVER.bat
+
+# Large media files (optional - uncomment if you want to exclude them)
+# public/*.mp3
+# public/*.mp4
+# public/*.png
+# public/*.jpg
+
+# Setup instructions (optional)
+SETUP-INSTRUCTIONS.md
