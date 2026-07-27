@@ -3,6 +3,13 @@ import { motion } from 'framer-motion'
 import Confetti from 'react-confetti'
 import './App.css'
 
+// Helper untuk memastikan base URL folder public terbaca dengan benar di berbagai env
+const getPublicAsset = (path) => {
+  // Menghapus slash di awal jika ada, lalu menggabungkannya dengan objek URL dasar
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+  return `${window.location.origin}/${cleanPath}`;
+}
+
 // Hero Section
 function Hero({ onBucketClick, onMessageClick }) {
   return (
@@ -141,9 +148,8 @@ function IQQuizGame() {
         }
       }, 1500)
     } else {
-      // If wrong on last question, show explanation option
       if (currentQuestion === questions.length - 1) {
-        // Don't auto-proceed, wait for user to see explanation
+        // Wait for explanation
       } else {
         setTimeout(() => {
           setCurrentQuestion(currentQuestion + 1)
@@ -317,7 +323,7 @@ function DodgeGame() {
   const [score, setScore] = useState(0)
   const [playerPos, setPlayerPos] = useState(50)
   const [obstacles, setObstacles] = useState([])
-  const [difficulty, setDifficulty] = useState(1500) // Start at 1500ms interval
+  const [difficulty, setDifficulty] = useState(1500)
   const gameRef = useRef(null)
   const animationRef = useRef(null)
   const touchStartX = useRef(null)
@@ -326,7 +332,6 @@ function DodgeGame() {
 
   useEffect(() => {
     if (gameStarted && !gameOver) {
-      // Keyboard controls
       const handleKeyPress = (e) => {
         if (e.key === 'ArrowLeft') {
           setPlayerPos((prev) => Math.max(10, prev - 10))
@@ -335,7 +340,6 @@ function DodgeGame() {
         }
       }
 
-      // Touch controls for mobile
       const handleTouchStart = (e) => {
         touchStartX.current = e.touches[0].clientX
       }
@@ -348,10 +352,8 @@ function DodgeGame() {
         
         if (Math.abs(diff) > 10) {
           if (diff < 0) {
-            // Swipe left
             setPlayerPos((prev) => Math.max(10, prev - 5))
           } else {
-            // Swipe right
             setPlayerPos((prev) => Math.min(90, prev + 5))
           }
           touchStartX.current = touchCurrentX
@@ -367,20 +369,17 @@ function DodgeGame() {
       window.addEventListener('touchmove', handleTouchMove)
       window.addEventListener('touchend', handleTouchEnd)
       
-      // Increase difficulty over time (spawn makin cepat DAN makin banyak sekaligus)
       const difficultyInterval = setInterval(() => {
         setDifficulty((prev) => Math.max(300, prev - 150))
-      }, 8000) // Setiap 8 detik, spawn makin cepat
+      }, 8000)
 
       const obstacleInterval = setInterval(() => {
-        // Makin kecil interval-nya (makin lama main), makin banyak benda
-        // yang jatuh sekaligus per gelombang -- bukan cuma makin cepat.
         const spawnCount = difficulty <= 600 ? 3 : difficulty <= 1000 ? 2 : 1
 
         const newObstacles = Array.from({ length: spawnCount }, (_, i) => ({
           id: `${Date.now()}-${i}-${Math.random().toString(36).slice(2, 7)}`,
           x: Math.random() * 80 + 10,
-          y: i * 15, // Spawn dengan jarak vertical
+          y: i * 15,
           emoji: obstacleEmojis[Math.floor(Math.random() * obstacleEmojis.length)]
         }))
         setObstacles((prev) => [...prev, ...newObstacles])
@@ -392,7 +391,6 @@ function DodgeGame() {
             .map((obs) => ({ ...obs, y: obs.y + 2 }))
             .filter((obs) => obs.y < 100)
 
-          // Check collision
           updated.forEach((obs) => {
             if (
               obs.y > 85 &&
@@ -472,14 +470,20 @@ function DodgeGame() {
           <div className="dodge-score">Skor: {Math.floor(score / 10)}</div>
           
           <div className="dodge-game-area" ref={gameRef}>
-            {/* Player - will be replaced with image */}
             <motion.div
               className="dodge-player"
               animate={{ left: `${playerPos}%` }}
               transition={{ duration: 0.1 }}
             >
-              {/* Replace with image: <img src="/avatar.png" alt="avatar" /> */}
-              <img src="/avatar.png" alt="avatar" className="player-avatar" />
+              {/* FIXED: Menggunakan getPublicAsset() untuk file avatar.png */}
+              <img 
+                src={getPublicAsset('/avatar.png')} 
+                alt="avatar" 
+                className="player-avatar" 
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
             </motion.div>
 
             {/* Obstacles */}
@@ -587,12 +591,12 @@ function BucketModal({ isOpen, onClose }) {
           className="bucket-container"
         >
           <div className="bucket-glow"></div>
+          {/* FIXED: Menggunakan getPublicAsset() untuk file bucket-bunga.png */}
           <img 
-            src="/bucket-bunga.png" 
+            src={getPublicAsset('/bucket-bunga.png')} 
             alt="Bucket Bunga" 
             className="bucket-image"
           />
-          {/* Falling petals animation */}
           <div className="petals-container">
             {[...Array(30)].map((_, i) => (
               <motion.div
@@ -742,8 +746,7 @@ function GiftModal({ isOpen, onClose }) {
   if (!isOpen) return null
 
   const handleGiftClick = () => {
-    // Open WhatsApp with pre-filled message
-    const phoneNumber = "6283119798951" // GANTI dengan nomor WA kamu (format: 628xxx)
+    const phoneNumber = "6283119798951"
     const message = "mana hadiah aku nya woiiii"
     const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
     window.open(waLink, '_blank')
@@ -829,12 +832,13 @@ function MusicPlayer() {
   const [isMinimized, setIsMinimized] = useState(false)
   const audioRef = useRef(null)
 
+  // FIXED: Menggunakan getPublicAsset() untuk file mp3 agar ter-load dengan benar dari folder public
   const songs = [
-    { title: "I've Always Loved U", artist: "Arash Buana", file: "/Arash Buana - i've always loved u (MV).mp3" },
-    { title: "Abadi", artist: "Dendi Nata", file: "/Dendi Nata - Abadi (Indo Version) Lyric Video.mp3" },
-    { title: "I'd Like to Watch You Sleeping", artist: "Sal Priadi", file: "/I'd like to watch you sleeping  lirik dan musik oleh Sal Priadi.mp3" },
-    { title: "Sampai Akhir Waktu", artist: "Yovie & Nuno", file: "/Yovie & Nuno - Sampai Akhir Waktu.mp3" },
-    { title: "Manusia Biasa", artist: "Yovie & Nuno", file: "/Yovie & Nuno - Manusia Biasa.mp3" }
+    { title: "I've Always Loved U", artist: "Arash Buana", file: getPublicAsset("/Arash Buana - i've always loved u (MV).mp3") },
+    { title: "Abadi", artist: "Dendi Nata", file: getPublicAsset("/Dendi Nata - Abadi (Indo Version) Lyric Video.mp3") },
+    { title: "I'd Like to Watch You Sleeping", artist: "Sal Priadi", file: getPublicAsset("/I'd like to watch you sleeping  lirik dan musik oleh Sal Priadi.mp3") },
+    { title: "Sampai Akhir Waktu", artist: "Yovie & Nuno", file: getPublicAsset("/Yovie & Nuno - Sampai Akhir Waktu.mp3") },
+    { title: "Manusia Biasa", artist: "Yovie & Nuno", file: getPublicAsset("/Yovie & Nuno - Manusia Biasa.mp3") }
   ]
 
   useEffect(() => {
@@ -943,7 +947,6 @@ function App() {
     }
     window.addEventListener('resize', handleResize)
     
-    // Stop confetti after 10 seconds
     setTimeout(() => setShowConfetti(false), 10000)
     
     return () => window.removeEventListener('resize', handleResize)
@@ -997,7 +1000,6 @@ function App() {
         </motion.h2>
         
         <div className="gallery-grid">
-          {/* Nama file sesuai yang ada di public folder */}
           {[
             { type: 'video', src: '/gallery1.mp4' },
             { type: 'video', src: '/gallery2.mp4' },
@@ -1015,8 +1017,9 @@ function App() {
               className="gallery-item"
             >
               {item.type === 'image' ? (
+                /* FIXED: Memakai helper getPublicAsset() pada src gambar */
                 <img 
-                  src={item.src} 
+                  src={getPublicAsset(item.src)} 
                   alt={`Memory ${i + 1}`}
                   className="gallery-media"
                   onError={(e) => {
@@ -1025,8 +1028,9 @@ function App() {
                   }}
                 />
               ) : (
+                /* FIXED: Memakai helper getPublicAsset() pada src video */
                 <video 
-                  src={item.src}
+                  src={getPublicAsset(item.src)}
                   className="gallery-media"
                   controls
                   controlsList="nodownload"
@@ -1060,13 +1064,18 @@ function App() {
           whileInView={{ opacity: 1, y: 0 }}
           className="video-container"
         >
+          {/* FIXED: Mengganti tag internal <source> menjadi src langsung di tag <video> 
+              agar fungsi catch error handler bawaan browser maupun getPublicAsset() berjalan optimal */}
           <video
+            src={getPublicAsset("/video-final.mp4")}
             controls
             controlsList="nodownload"
             className="birthday-video"
             onEnded={() => setShowVideoMessage(true)}
+            onError={(e) => {
+              console.log("Video utama gagal dimuat");
+            }}
           >
-            <source src="/video-final.mp4" type="video/mp4" />
             Browser kamu tidak support video tag.
           </video>
           
