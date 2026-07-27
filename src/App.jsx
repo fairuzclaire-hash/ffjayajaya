@@ -3,11 +3,35 @@ import { motion } from 'framer-motion'
 import Confetti from 'react-confetti'
 import './App.css'
 
-// Helper untuk memastikan base URL folder public terbaca dengan benar di berbagai env
+// Google Drive links untuk semua media files
+const MEDIA_URLS = {
+  // Images
+  'avatar.png': 'https://drive.google.com/uc?export=download&id=1Zx6b5OcJ0-v2k9KgtYyjqIJyRU6tvxjE',
+  'bucket-bunga.png': 'https://drive.google.com/uc?export=download&id=12kYwN-ond6GQFFqjma5F0yLQqY70LvC7',
+  'gallery4.jpg': 'https://drive.google.com/uc?export=download&id=1_Hp97V5L3hTZAatmVSr0emG4UWKY6N-T',
+  'gallery5.jpeg': 'https://drive.google.com/uc?export=download&id=1yMrHoR40kHD0O-ggNdb9QheGMurdHZ4f',
+  'gallery6.jpeg': 'https://drive.google.com/uc?export=download&id=1ljVkYBVwcpSQBuo2k7Gvv4pD6Ym3czJB',
+  
+  // Videos
+  'gallery1.mp4': 'https://drive.google.com/uc?export=download&id=1Aypft7JOg_6x3Os0ycToXQxLTHSUemgc',
+  'gallery2.mp4': 'https://drive.google.com/uc?export=download&id=18KrHiDbg4Rk0XLF9u38Qze2FTukVglct',
+  'gallery3.mp4': 'https://drive.google.com/uc?export=download&id=1BX614rhy48aXo8WVXVcuyjdHzpEAiHER',
+  'video-final.mp4': 'https://drive.google.com/uc?export=download&id=1Ke40cnQz2gO1zK2I7gvPRcbuleZolHCt',
+  
+  // Audio
+  "Arash Buana - i've always loved u (MV).mp3": 'https://drive.google.com/uc?export=download&id=1BfIH5Q-LKIzXsLlO7wIecIUU5K_7Si-L',
+  'Dendi Nata - Abadi (Indo Version) Lyric Video.mp3': 'https://drive.google.com/uc?export=download&id=1l-6DY6YQ9oMX0OEXWDGkknOFFGS1Zdny',
+  "I'd like to watch you sleeping  lirik dan musik oleh Sal Priadi.mp3": 'https://drive.google.com/uc?export=download&id=1lu4zVScJC1ZTsU2RnRGWoEbQLC1Ey8db',
+  'Joon - with ease (Official Lyric Video).mp3': 'https://drive.google.com/uc?export=download&id=1MSXXXADcrAMRUvWVA7x8wvPAwCYKZuZo',
+  'Yovie & Nuno - Manusia Biasa.mp3': 'https://drive.google.com/uc?export=download&id=1CaS-cbE-qSy_2Z0nKXvaCZ38sSAcl5H8',
+  'Yovie & Nuno - Sampai Akhir Waktu.mp3': 'https://drive.google.com/uc?export=download&id=112ZfyZzZWPWJzDtvEN7fnWsq-muKpYPU'
+}
+
+// Helper untuk get media dari Google Drive atau fallback ke local
 const getPublicAsset = (path) => {
-  // Menghapus slash di awal jika ada, lalu menggabungkannya dengan objek URL dasar
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
-  return `${window.location.origin}/${cleanPath}`;
+  // Return Google Drive URL jika ada, kalau ga ada fallback ke local
+  return MEDIA_URLS[cleanPath] || `${window.location.origin}/${cleanPath}`;
 }
 
 // Hero Section
@@ -475,9 +499,8 @@ function DodgeGame() {
               animate={{ left: `${playerPos}%` }}
               transition={{ duration: 0.1 }}
             >
-              {/* FIXED: Menggunakan getPublicAsset() untuk file avatar.png */}
               <img 
-                src={getPublicAsset('/avatar.png')} 
+                src={getPublicAsset('avatar.png')} 
                 alt="avatar" 
                 className="player-avatar" 
                 onError={(e) => {
@@ -591,9 +614,8 @@ function BucketModal({ isOpen, onClose }) {
           className="bucket-container"
         >
           <div className="bucket-glow"></div>
-          {/* FIXED: Menggunakan getPublicAsset() untuk file bucket-bunga.png */}
           <img 
-            src={getPublicAsset('/bucket-bunga.png')} 
+            src={getPublicAsset('bucket-bunga.png')} 
             alt="Bucket Bunga" 
             className="bucket-image"
           />
@@ -832,13 +854,13 @@ function MusicPlayer() {
   const [isMinimized, setIsMinimized] = useState(false)
   const audioRef = useRef(null)
 
-  // FIXED: Menggunakan getPublicAsset() untuk file mp3 agar ter-load dengan benar dari folder public
+  // Daftar lagu dari Google Drive
   const songs = [
-    { title: "I've Always Loved U", artist: "Arash Buana", file: getPublicAsset("/Arash Buana - i've always loved u (MV).mp3") },
-    { title: "Abadi", artist: "Dendi Nata", file: getPublicAsset("/Dendi Nata - Abadi (Indo Version) Lyric Video.mp3") },
-    { title: "I'd Like to Watch You Sleeping", artist: "Sal Priadi", file: getPublicAsset("/I'd like to watch you sleeping  lirik dan musik oleh Sal Priadi.mp3") },
-    { title: "Sampai Akhir Waktu", artist: "Yovie & Nuno", file: getPublicAsset("/Yovie & Nuno - Sampai Akhir Waktu.mp3") },
-    { title: "Manusia Biasa", artist: "Yovie & Nuno", file: getPublicAsset("/Yovie & Nuno - Manusia Biasa.mp3") }
+    { title: "I've Always Loved U", artist: "Arash Buana", file: getPublicAsset("Arash Buana - i've always loved u (MV).mp3") },
+    { title: "Abadi", artist: "Dendi Nata", file: getPublicAsset("Dendi Nata - Abadi (Indo Version) Lyric Video.mp3") },
+    { title: "I'd Like to Watch You Sleeping", artist: "Sal Priadi", file: getPublicAsset("I'd like to watch you sleeping  lirik dan musik oleh Sal Priadi.mp3") },
+    { title: "Sampai Akhir Waktu", artist: "Yovie & Nuno", file: getPublicAsset("Yovie & Nuno - Sampai Akhir Waktu.mp3") },
+    { title: "Manusia Biasa", artist: "Yovie & Nuno", file: getPublicAsset("Yovie & Nuno - Manusia Biasa.mp3") }
   ]
 
   useEffect(() => {
@@ -1001,12 +1023,12 @@ function App() {
         
         <div className="gallery-grid">
           {[
-            { type: 'video', src: '/gallery1.mp4' },
-            { type: 'video', src: '/gallery2.mp4' },
-            { type: 'video', src: '/gallery3.mp4' },
-            { type: 'image', src: '/gallery4.jpg' },
-            { type: 'image', src: '/gallery5.jpeg' },
-            { type: 'image', src: '/gallery6.jpeg' }
+            { type: 'video', src: 'gallery1.mp4' },
+            { type: 'video', src: 'gallery2.mp4' },
+            { type: 'video', src: 'gallery3.mp4' },
+            { type: 'image', src: 'gallery4.jpg' },
+            { type: 'image', src: 'gallery5.jpeg' },
+            { type: 'image', src: 'gallery6.jpeg' }
           ].map((item, i) => (
             <motion.div
               key={i}
@@ -1017,7 +1039,6 @@ function App() {
               className="gallery-item"
             >
               {item.type === 'image' ? (
-                /* FIXED: Memakai helper getPublicAsset() pada src gambar */
                 <img 
                   src={getPublicAsset(item.src)} 
                   alt={`Memory ${i + 1}`}
@@ -1028,7 +1049,6 @@ function App() {
                   }}
                 />
               ) : (
-                /* FIXED: Memakai helper getPublicAsset() pada src video */
                 <video 
                   src={getPublicAsset(item.src)}
                   className="gallery-media"
@@ -1064,10 +1084,8 @@ function App() {
           whileInView={{ opacity: 1, y: 0 }}
           className="video-container"
         >
-          {/* FIXED: Mengganti tag internal <source> menjadi src langsung di tag <video> 
-              agar fungsi catch error handler bawaan browser maupun getPublicAsset() berjalan optimal */}
           <video
-            src={getPublicAsset("/video-final.mp4")}
+            src={getPublicAsset("video-final.mp4")}
             controls
             controlsList="nodownload"
             className="birthday-video"

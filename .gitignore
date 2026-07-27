@@ -35,11 +35,12 @@ START.bat
 START-POWERSHELL.ps1
 START-SERVER.bat
 
-# Large media files (optional - uncomment if you want to exclude them)
-# public/*.mp3
-# public/*.mp4
-# public/*.png
-# public/*.jpg
+# Large media files (uploaded to Google Drive)
+public/*.mp3
+public/*.mp4
+public/*.png
+public/*.jpg
+public/*.jpeg
 
 # Setup instructions (optional)
 SETUP-INSTRUCTIONS.md
